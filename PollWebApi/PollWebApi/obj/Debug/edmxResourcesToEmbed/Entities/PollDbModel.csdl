@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="PollDataBaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Options">
+    <Key>
+      <PropertyRef Name="Option_Id" />
+    </Key>
+    <Property Name="Option_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Poll_Id" Type="Int32" />
+    <NavigationProperty Name="Poll" Relationship="Self.FK__Options__Poll_Id__38996AB5" FromRole="Options" ToRole="Poll" />
+    <NavigationProperty Name="Votes" Relationship="Self.FK__Votes__Option_Id__3A81B327" FromRole="Options" ToRole="Votes" />
+  </EntityType>
+  <EntityType Name="Poll">
+    <Key>
+      <PropertyRef Name="Poll_Id" />
+    </Key>
+    <Property Name="Poll_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Options" Relationship="Self.FK__Options__Poll_Id__38996AB5" FromRole="Poll" ToRole="Options" />
+    <NavigationProperty Name="Views" Relationship="Self.FK__Views__Poll_Id__3D5E1FD2" FromRole="Poll" ToRole="Views" />
+  </EntityType>
+  <EntityType Name="Views">
+    <Key>
+      <PropertyRef Name="View_Id" />
+    </Key>
+    <Property Name="View_Id" Type="Int32" Nullable="false" />
+    <Property Name="Poll_Id" Type="Int32" />
+    <NavigationProperty Name="Poll" Relationship="Self.FK__Views__Poll_Id__3D5E1FD2" FromRole="Views" ToRole="Poll" />
+  </EntityType>
+  <EntityType Name="Votes">
+    <Key>
+      <PropertyRef Name="Option_Id" />
+    </Key>
+    <Property Name="Option_Id" Type="Int32" Nullable="false" />
+    <Property Name="Date" Type="DateTime" Precision="0" />
+    <NavigationProperty Name="Options" Relationship="Self.FK__Votes__Option_Id__3A81B327" FromRole="Votes" ToRole="Options" />
+  </EntityType>
+  <Association Name="FK__Options__Poll_Id__38996AB5">
+    <End Role="Poll" Type="Self.Poll" Multiplicity="0..1" />
+    <End Role="Options" Type="Self.Options" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Poll">
+        <PropertyRef Name="Poll_Id" />
+      </Principal>
+      <Dependent Role="Options">
+        <PropertyRef Name="Poll_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Votes__Option_Id__3A81B327">
+    <End Role="Options" Type="Self.Options" Multiplicity="1" />
+    <End Role="Votes" Type="Self.Votes" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Options">
+        <PropertyRef Name="Option_Id" />
+      </Principal>
+      <Dependent Role="Votes">
+        <PropertyRef Name="Option_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Views__Poll_Id__3D5E1FD2">
+    <End Role="Poll" Type="Self.Poll" Multiplicity="0..1" />
+    <End Role="Views" Type="Self.Views" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Poll">
+        <PropertyRef Name="Poll_Id" />
+      </Principal>
+      <Dependent Role="Views">
+        <PropertyRef Name="Poll_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="PollDataBaseEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Options" EntityType="Self.Options" />
+    <EntitySet Name="Poll" EntityType="Self.Poll" />
+    <EntitySet Name="Views" EntityType="Self.Views" />
+    <EntitySet Name="Votes" EntityType="Self.Votes" />
+    <AssociationSet Name="FK__Options__Poll_Id__38996AB5" Association="Self.FK__Options__Poll_Id__38996AB5">
+      <End Role="Poll" EntitySet="Poll" />
+      <End Role="Options" EntitySet="Options" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Votes__Option_Id__3A81B327" Association="Self.FK__Votes__Option_Id__3A81B327">
+      <End Role="Options" EntitySet="Options" />
+      <End Role="Votes" EntitySet="Votes" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Views__Poll_Id__3D5E1FD2" Association="Self.FK__Views__Poll_Id__3D5E1FD2">
+      <End Role="Poll" EntitySet="Poll" />
+      <End Role="Views" EntitySet="Views" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

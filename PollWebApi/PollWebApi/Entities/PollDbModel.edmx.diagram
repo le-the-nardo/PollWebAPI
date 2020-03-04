@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="0aebabe6a365477c81b4205aaf41e6a2" Name="Diagram1">
+        <EntityTypeShape EntityType="PollDataBaseModel.Options" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="PollDataBaseModel.Poll" Width="1.5" PointX="0.75" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="PollDataBaseModel.Views" Width="1.5" PointX="3" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="PollDataBaseModel.Votes" Width="1.5" PointX="5.25" PointY="1.25" IsExpanded="true" />
+        <AssociationConnector Association="PollDataBaseModel.FK__Options__Poll_Id__38996AB5" ManuallyRouted="false" />
+        <AssociationConnector Association="PollDataBaseModel.FK__Votes__Option_Id__3A81B327" ManuallyRouted="false" />
+        <AssociationConnector Association="PollDataBaseModel.FK__Views__Poll_Id__3D5E1FD2" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

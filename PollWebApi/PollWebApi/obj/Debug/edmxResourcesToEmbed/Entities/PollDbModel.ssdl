@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="PollDataBaseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Options">
+    <Key>
+      <PropertyRef Name="Option_Id" />
+    </Key>
+    <Property Name="Option_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Description" Type="nvarchar" MaxLength="50" />
+    <Property Name="Poll_Id" Type="int" />
+  </EntityType>
+  <EntityType Name="Poll">
+    <Key>
+      <PropertyRef Name="Poll_Id" />
+    </Key>
+    <Property Name="Poll_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Description" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Views">
+    <Key>
+      <PropertyRef Name="View_Id" />
+    </Key>
+    <Property Name="View_Id" Type="int" Nullable="false" />
+    <Property Name="Poll_Id" Type="int" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'PollDataBase.dbo.Votes' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="Votes">
+    <Key>
+      <PropertyRef Name="Option_Id" />
+    </Key>
+    <Property Name="Option_Id" Type="int" Nullable="false" />
+    <Property Name="Date" Type="date" />
+  </EntityType>
+  <Association Name="FK__Options__Poll_Id__38996AB5">
+    <End Role="Poll" Type="Self.Poll" Multiplicity="0..1" />
+    <End Role="Options" Type="Self.Options" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Poll">
+        <PropertyRef Name="Poll_Id" />
+      </Principal>
+      <Dependent Role="Options">
+        <PropertyRef Name="Poll_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Views__Poll_Id__3D5E1FD2">
+    <End Role="Poll" Type="Self.Poll" Multiplicity="0..1" />
+    <End Role="Views" Type="Self.Views" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Poll">
+        <PropertyRef Name="Poll_Id" />
+      </Principal>
+      <Dependent Role="Views">
+        <PropertyRef Name="Poll_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Votes__Option_Id__3A81B327">
+    <End Role="Options" Type="Self.Options" Multiplicity="1" />
+    <End Role="Votes" Type="Self.Votes" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Options">
+        <PropertyRef Name="Option_Id" />
+      </Principal>
+      <Dependent Role="Votes">
+        <PropertyRef Name="Option_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="PollDataBaseModelStoreContainer">
+    <EntitySet Name="Options" EntityType="Self.Options" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Poll" EntityType="Self.Poll" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Views" EntityType="Self.Views" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Votes" EntityType="Self.Votes" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [Votes].[Option_Id] AS [Option_Id], 
+    [Votes].[Date] AS [Date]
+    FROM [dbo].[Votes] AS [Votes]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="FK__Options__Poll_Id__38996AB5" Association="Self.FK__Options__Poll_Id__38996AB5">
+      <End Role="Poll" EntitySet="Poll" />
+      <End Role="Options" EntitySet="Options" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Views__Poll_Id__3D5E1FD2" Association="Self.FK__Views__Poll_Id__3D5E1FD2">
+      <End Role="Poll" EntitySet="Poll" />
+      <End Role="Views" EntitySet="Views" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Votes__Option_Id__3A81B327" Association="Self.FK__Votes__Option_Id__3A81B327">
+      <End Role="Options" EntitySet="Options" />
+      <End Role="Votes" EntitySet="Votes" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
