@@ -21,23 +21,25 @@ namespace PollWebApi.Controllers
 
         private PollDataBaseEntities db = new PollDataBaseEntities();
 
-        // GET: api/Polls
-        public IQueryable<Poll> GetPoll()
-        {
-            return db.Poll;
-        }
-
         // GET: api/Polls/5
         [ResponseType(typeof(Poll))]
+        [Route("poll/{id}")]
         public IHttpActionResult GetPoll(int id)
         {
-            Poll poll = db.Poll.Find(id);
+            //Poll poll = db.Poll.Find(id);
+            //Options op = db.Options.Join();
+
+            Poll poll = db.Poll.Join(db.Options, desc => desc.Options, new { firstname = "teste"});
+            
+                //Find(poll.Poll_Id);
+
             if (poll == null)
             {
                 return NotFound();
             }
 
-            return Ok(poll);
+            //return Ok(poll.Description);
+            return Json(new { poll_id = poll.Poll_Id, poll_description = poll.Description, options = op });
         }
 
         // POST: api/Polls
