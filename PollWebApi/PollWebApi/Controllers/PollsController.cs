@@ -40,41 +40,6 @@ namespace PollWebApi.Controllers
             return Ok(poll);
         }
 
-        // PUT: api/Polls/5
-        [ResponseType(typeof(void))]
-        public IHttpActionResult PutPoll(int id, Poll poll)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != poll.Poll_Id)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(poll).State = EntityState.Modified;
-
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PollExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return StatusCode(HttpStatusCode.NoContent);
-        }
-
         // POST: api/Polls
         [ResponseType(typeof(Poll))]
         public IHttpActionResult PostPoll(Poll poll)
@@ -89,23 +54,7 @@ namespace PollWebApi.Controllers
 
             return CreatedAtRoute("DefaultApi", new { id = poll.Poll_Id }, poll);
         }
-
-        // DELETE: api/Polls/5
-        [ResponseType(typeof(Poll))]
-        public IHttpActionResult DeletePoll(int id)
-        {
-            Poll poll = db.Poll.Find(id);
-            if (poll == null)
-            {
-                return NotFound();
-            }
-
-            db.Poll.Remove(poll);
-            db.SaveChanges();
-
-            return Ok(poll);
-        }
-
+                
         protected override void Dispose(bool disposing)
         {
             if (disposing)

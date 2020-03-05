@@ -40,41 +40,6 @@ namespace PollWebApi.Controllers
             return Ok(options);
         }
 
-        // PUT: api/Options/5
-        [ResponseType(typeof(void))]
-        public IHttpActionResult PutOptions(int id, Options options)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != options.Option_Id)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(options).State = EntityState.Modified;
-
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!OptionsExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return StatusCode(HttpStatusCode.NoContent);
-        }
-
         // POST: api/Options
         [ResponseType(typeof(Options))]
         public IHttpActionResult PostOptions(Options options)
@@ -88,22 +53,6 @@ namespace PollWebApi.Controllers
             db.SaveChanges();
 
             return CreatedAtRoute("DefaultApi", new { id = options.Option_Id }, options);
-        }
-
-        // DELETE: api/Options/5
-        [ResponseType(typeof(Options))]
-        public IHttpActionResult DeleteOptions(int id)
-        {
-            Options options = db.Options.Find(id);
-            if (options == null)
-            {
-                return NotFound();
-            }
-
-            db.Options.Remove(options);
-            db.SaveChanges();
-
-            return Ok(options);
         }
 
         protected override void Dispose(bool disposing)
