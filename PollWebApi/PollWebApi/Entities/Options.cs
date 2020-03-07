@@ -20,5 +20,10 @@ namespace PollWebApi.Entities
     
         public virtual Poll Poll { get; set; }
         public virtual Votes Votes { get; set; }
+
+        internal object Map()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

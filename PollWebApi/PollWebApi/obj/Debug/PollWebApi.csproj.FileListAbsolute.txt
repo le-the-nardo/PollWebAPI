@@ -92,7 +92,7 @@ C:\Users\Leonardo\Desktop\PollWebAPI\PollWebApi\PollWebApi\bin\pt-br\System.Web.
 C:\Users\Leonardo\Desktop\PollWebAPI\PollWebApi\PollWebApi\bin\pt-br\System.Web.WebPages.resources.dll
 C:\Users\Leonardo\Desktop\PollWebAPI\PollWebApi\PollWebApi\bin\pt-br\System.Web.WebPages.Deployment.resources.dll
 C:\Users\Leonardo\Desktop\PollWebAPI\PollWebApi\PollWebApi\bin\pt-br\System.Web.WebPages.Razor.resources.dll
-C:\Users\Leonardo\Desktop\PollWebAPI\PollWebApi\PollWebApi\obj\Debug\PollWebApi.csprojAssemblyReference.cache
 C:\Users\Leonardo\Desktop\PollWebAPI\PollWebApi\PollWebApi\obj\Debug\PollWebApi.csproj.CopyComplete
 C:\Users\Leonardo\Desktop\PollWebAPI\PollWebApi\PollWebApi\obj\Debug\PollWebApi.dll
 C:\Users\Leonardo\Desktop\PollWebAPI\PollWebApi\PollWebApi\obj\Debug\PollWebApi.pdb
+C:\Users\Leonardo\Desktop\PollWebAPI\PollWebApi\PollWebApi\obj\Debug\PollWebApi.csprojAssemblyReference.cache

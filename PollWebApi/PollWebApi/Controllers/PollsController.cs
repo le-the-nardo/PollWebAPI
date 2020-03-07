@@ -9,37 +9,49 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using PollWebApi.Entities;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using PollWebApi.Models.Services;
+using PollWebApi.Models.Responses;
 
 namespace PollWebApi.Controllers
 {
     public class PollsController : ApiController
     {
+        private PollDataBaseEntities db = new PollDataBaseEntities();
+        private PollService _PollService;
         public PollsController()
         {
             db.Configuration.ProxyCreationEnabled = false;
+            _PollService = new PollService(db);
+
         }
 
-        private PollDataBaseEntities db = new PollDataBaseEntities();
-
         // GET: api/Polls/5
-        [ResponseType(typeof(Poll))]
+        [ResponseType(typeof(GetPollResponse))]
         [Route("poll/{id}")]
         public IHttpActionResult GetPoll(int id)
         {
-            //Poll poll = db.Poll.Find(id);
-            //Options op = db.Options.Join();
-
-            Poll poll = db.Poll.Join(db.Options, desc => desc.Options, new { firstname = "teste"});
-            
-                //Find(poll.Poll_Id);
+            var poll = _PollService.GetPollByID(id).ToList();
 
             if (poll == null)
             {
                 return NotFound();
             }
+            
+            /*var poll = from p in db.Poll
+                       where (p.Poll_Id == id)
+                       select new PollDTO()
+                       {
+                           poll_id = p.Poll_Id,
+                           poll_description = p.Description
+                       };
+                       */
 
-            //return Ok(poll.Description);
-            return Json(new { poll_id = poll.Poll_Id, poll_description = poll.Description, options = op });
+
+
+            return Json(new { poll});
+            
         }
 
         // POST: api/Polls
