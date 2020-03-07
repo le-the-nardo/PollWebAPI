@@ -27,7 +27,7 @@ namespace PollWebApi.Controllers
 
         }
 
-        // GET: api/Polls/5
+        // GET: poll/5
         [ResponseType(typeof(GetPollResponse))]
         [Route("poll/{id}")]
         public IHttpActionResult GetPoll(int id)
@@ -39,34 +39,22 @@ namespace PollWebApi.Controllers
                 return NotFound();
             }
             
-            /*var poll = from p in db.Poll
-                       where (p.Poll_Id == id)
-                       select new PollDTO()
-                       {
-                           poll_id = p.Poll_Id,
-                           poll_description = p.Description
-                       };
-                       */
-
-
-
-            return Json(new { poll});
-            
+            return Json(new { poll});            
         }
 
-        // POST: api/Polls
-        [ResponseType(typeof(Poll))]
-        public IHttpActionResult PostPoll(Poll poll)
+        // POST: api/poll
+        [ResponseType(typeof(PostPollResponse))]
+        [Route("poll")]
+        public IHttpActionResult PostPoll(PostPollResponse poll)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.Poll.Add(poll);
-            db.SaveChanges();
-
-            return CreatedAtRoute("DefaultApi", new { id = poll.Poll_Id }, poll);
+            var p = _PollService.AddPoll(poll);        
+            
+            return Json(new { poll_id = p.Poll_Id });
         }
                 
         protected override void Dispose(bool disposing)
