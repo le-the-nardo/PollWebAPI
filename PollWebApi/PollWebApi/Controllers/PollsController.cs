@@ -41,9 +41,8 @@ namespace PollWebApi.Controllers
             
             return Json(new { poll});            
         }
-
-        // POST: api/poll
-        //[ResponseType(typeof(Poll))] ****talvez
+        
+        // POST: poll
         [ResponseType(typeof(PostPollResponse))]
         [Route("poll")]
         public IHttpActionResult PostPoll(PostPollResponse poll)
@@ -57,7 +56,22 @@ namespace PollWebApi.Controllers
             
             return Json(new { poll_id = p.Poll_Id });
         }
-                
+
+        // POST: poll/5/vote
+        [ResponseType(typeof(PostVoteResponse))]
+        [Route("poll/{id:int}/vote")]
+        public IHttpActionResult PostVote(int id)
+        {
+            /*if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }*/
+            var v = _PollService.AddVote(id);
+
+            return Json(new { option_id = id });
+        }
+
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

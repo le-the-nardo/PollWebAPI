@@ -50,7 +50,6 @@ namespace PollWebApi.Models.Services
                        });
 
             return poll.ToList();
-
         }
 
         public Poll AddPoll(PostPollResponse poll)
@@ -86,6 +85,11 @@ namespace PollWebApi.Models.Services
            
         }
 
+        public bool AddVote(int op)
+        {
+            //if ()
+            return true;
+        }
 
 
 
