@@ -87,8 +87,26 @@ namespace PollWebApi.Models.Services
 
         public bool AddVote(int op)
         {
-            //if ()
-            return true;
+            db.Configuration.ProxyCreationEnabled = false;
+            using (var DBContext = db.Database.BeginTransaction())
+            {
+                var o = db.Options.Find(op);
+
+                if (o == null)
+                    return false;
+
+                var v = new Votes()
+                {
+                    Option_Id = op,
+                    Date = DateTime.Now
+                };
+                
+                db.Votes.Add(v);
+                db.SaveChanges();
+                DBContext.Commit();
+
+                return true;
+            }
         }
 
 

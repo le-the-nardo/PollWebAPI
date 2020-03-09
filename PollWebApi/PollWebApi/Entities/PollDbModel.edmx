@@ -76,11 +76,7 @@ warning 6002: The table/view 'PollDataBase.dbo.Votes' does not have a primary ke
           <EntitySet Name="Options" EntityType="Self.Options" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Poll" EntityType="Self.Poll" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Views" EntityType="Self.Views" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Votes" EntityType="Self.Votes" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [Votes].[Option_Id] AS [Option_Id], 
-    [Votes].[Date] AS [Date]
-    FROM [dbo].[Votes] AS [Votes]</DefiningQuery>
+          <EntitySet Name="Votes" EntityType="Self.Votes" store:Type="Tables" Schema="dbo">
           </EntitySet>
           <AssociationSet Name="FK__Options__Poll_Id__38996AB5" Association="Self.FK__Options__Poll_Id__38996AB5">
             <End Role="Poll" EntitySet="Poll" />

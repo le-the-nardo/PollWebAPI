@@ -13,6 +13,7 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using PollWebApi.Models.Services;
 using PollWebApi.Models.Responses;
+using System.Web;
 
 namespace PollWebApi.Controllers
 {
@@ -34,7 +35,7 @@ namespace PollWebApi.Controllers
         {
             var poll = _PollService.GetPollByID(id).ToList();
 
-            if (poll == null)
+            if (poll.Count == 0)
             {
                 return NotFound();
             }
@@ -58,17 +59,22 @@ namespace PollWebApi.Controllers
         }
 
         // POST: poll/5/vote
-        [ResponseType(typeof(PostVoteResponse))]
-        [Route("poll/{id:int}/vote")]
-        public IHttpActionResult PostVote(int id)
+        //[ResponseType(typeof(PostVoteResponse))]
+        [Route("poll/{op_id:int}/vote")]
+        public IHttpActionResult PostVote(int op_id)
         {
-            /*if (!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
-            }*/
-            var v = _PollService.AddVote(id);
+            }
 
-            return Json(new { option_id = id });
+            var vote = _PollService.AddVote(op_id);
+            if (!vote)
+            {
+                return NotFound();
+            }            
+
+            return Json(new { option_id = op_id });
         }
 
 
@@ -79,11 +85,6 @@ namespace PollWebApi.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
-        }
-
-        private bool PollExists(int id)
-        {
-            return db.Poll.Count(e => e.Poll_Id == id) > 0;
         }
     }
 }
