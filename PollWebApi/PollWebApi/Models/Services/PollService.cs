@@ -55,36 +55,35 @@ namespace PollWebApi.Models.Services
 
         public Poll AddPoll(PostPollResponse poll)
         {
-            var p = new Poll()
+            db.Configuration.ProxyCreationEnabled = false;
+            using (var DBContext = db.Database.BeginTransaction())
             {
-                Description = poll.Poll_description
-            };
+                var p = new Poll()
+                {
+                    Poll_Id = db.Poll.Count() + 1,
+                    Description = poll.Poll_description
+                };
 
-            var o = new Options();
+                db.Poll.Add(p);
 
-            db.Poll.Add(p);
-            db.SaveChanges();
+                List<Options> options = new List<Options>();
 
-            List<PostOptionResponse> options = new List<PostOptionResponse>();
-            poll.Options.ToList().ForEach(
-                description => options.Add(
-                    new PostOptionResponse()
+                foreach (var op in poll.Options)
+                {
+                    options.Add(new Options
                     {
-                        Option_description = description.Option_description
-                    })
-                );
+                        Description = op,
+                        Poll_Id = p.Poll_Id
+                    });
+                }
 
-            foreach (var c in options)
-            {
-                o.Option_Id = db.Options.Count() + 1;
-                o.Description = c.Option_description;
-                o.Poll_Id = db.Options.Count();
-                db.Options.Add(o);
+                db.Options.AddRange(options);
+                db.SaveChanges();
+                DBContext.Commit();
+
+                return p;
             }
-
-            db.SaveChanges();
-            
-            return p;
+           
         }
 
 

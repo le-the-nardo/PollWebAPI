@@ -43,6 +43,7 @@ namespace PollWebApi.Controllers
         }
 
         // POST: api/poll
+        //[ResponseType(typeof(Poll))] ****talvez
         [ResponseType(typeof(PostPollResponse))]
         [Route("poll")]
         public IHttpActionResult PostPoll(PostPollResponse poll)

@@ -11,13 +11,17 @@ namespace PollWebApi.Entities
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+
     public partial class Options
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Option_Id { get; set; }
         public string Description { get; set; }
+        [Required]
         public Nullable<int> Poll_Id { get; set; }
-    
         public virtual Poll Poll { get; set; }
         public virtual Votes Votes { get; set; }
 
