@@ -39,7 +39,9 @@ namespace PollWebApi.Controllers
             {
                 return NotFound();
             }
-            
+
+            _PollService.AddView(id);
+
             return Json(new { poll});            
         }
         
@@ -75,6 +77,20 @@ namespace PollWebApi.Controllers
             }            
 
             return Json(new { option_id = op_id });
+        }
+        
+        // POST: poll/5/vote
+        //[ResponseType(typeof(PostVoteResponse))]
+        [Route("poll/{poll_id:int}/stats")]
+        public IHttpActionResult GetPollStats(int poll_id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            _PollService.GetStatsById(poll_id);
+
+            return Json(new { option_id = 1 });
         }
 
 

@@ -18,21 +18,7 @@ namespace PollWebApi.Models.Services
         {
             this.db = db;
         }
-
-        /*public string returnJsonArray(p)
-        {
-           var obj = new
-           {
-               options = new object[] { foreach()new { option_id = "Huguinho", idade = 10 },
-                                        new { option_id = "Zezinho", idade = 12 },
-                                        new { option_id = "Luizinho", idade = 10 }}
-           };
-
-           JavaScriptSerializer js = new JavaScriptSerializer();
-           string strJson = js.Serialize(obj);
-           return strJson;
-        }*/
-
+        
         public List<GetPollResponse> GetPollByID(int id)
         {
             var poll = from p in db.Poll
@@ -82,7 +68,7 @@ namespace PollWebApi.Models.Services
 
                 return p;
             }
-           
+
         }
 
         public bool AddVote(int op)
@@ -100,7 +86,7 @@ namespace PollWebApi.Models.Services
                     Option_Id = op,
                     Date = DateTime.Now
                 };
-                
+
                 db.Votes.Add(v);
                 db.SaveChanges();
                 DBContext.Commit();
@@ -109,8 +95,47 @@ namespace PollWebApi.Models.Services
             }
         }
 
+        public void AddView(int poll_id)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            using (var DBContext = db.Database.BeginTransaction())
+            {
+                var v = new Views()
+                {
+                    View_Id = (from views in db.Views
+                               select views).Count() + 1,
+                    Poll_Id = poll_id
+                };
 
+                db.Views.Add(v);
+                db.SaveChanges();
+                DBContext.Commit();
+            }
+        }
 
+        public void /*GetStatsResponse*/ GetStatsById(int poll_id)
+        {
+            var pollViews = (from views in db.Views
+                             where (views.Poll_Id == poll_id)
+                             select views).Count();
 
+            List<GetVotesStatsResponse> votes = new List<GetVotesStatsResponse>();
+            
+            votes = (from v in db.Votes
+                           join o in db.Options on v.Option_Id equals o.Option_Id
+                           where (o.Poll_Id == poll_id)
+                           select (new GetVotesStatsResponse()
+                           {
+                               Option_Id = o.Option_Id,
+                               Qty = db.Votes.Where(q => q.Option_Id == o.Option_Id).Count()
+                           })).ToList();
+
+            
+            GetStatsResponse stats = new GetStatsResponse()
+            {
+                Views = pollViews,
+                Votes = votes
+            };
+        }
     }
 }
