@@ -19,7 +19,7 @@ namespace PollWebApi.Models.Services
             this.db = db;
         }
         
-        public List<GetPollResponse> GetPollByID(int id)
+        public GetPollResponse GetPollByID(int id)
         {
             var poll = from p in db.Poll
                        where (p.Poll_Id == id)
@@ -35,7 +35,7 @@ namespace PollWebApi.Models.Services
                            }).ToList()
                        });
 
-            return poll.ToList();
+            return poll.FirstOrDefault();
         }
 
         public Poll AddPoll(PostPollResponse poll)
@@ -45,11 +45,11 @@ namespace PollWebApi.Models.Services
             {
                 var p = new Poll()
                 {
-                    Poll_Id = db.Poll.Count() + 1,
                     Description = poll.Poll_description
                 };
 
                 db.Poll.Add(p);
+
 
                 List<Options> options = new List<Options>();
 
@@ -113,7 +113,7 @@ namespace PollWebApi.Models.Services
             }
         }
 
-        public void /*GetStatsResponse*/ GetStatsById(int poll_id)
+        public GetStatsResponse GetStatsById(int poll_id)
         {
             var pollViews = (from views in db.Views
                              where (views.Poll_Id == poll_id)
@@ -121,17 +121,16 @@ namespace PollWebApi.Models.Services
 
             List<GetVotesStatsResponse> votes = new List<GetVotesStatsResponse>();
             
-            votes = (from v in db.Votes
-                           join o in db.Options on v.Option_Id equals o.Option_Id
+            votes = (from o in db.Options
                            where (o.Poll_Id == poll_id)
-                           select (new GetVotesStatsResponse()
+                           select (new GetVotesStatsResponse
                            {
                                Option_Id = o.Option_Id,
                                Qty = db.Votes.Where(q => q.Option_Id == o.Option_Id).Count()
                            })).ToList();
 
             
-            GetStatsResponse stats = new GetStatsResponse()
+            return new GetStatsResponse
             {
                 Views = pollViews,
                 Votes = votes

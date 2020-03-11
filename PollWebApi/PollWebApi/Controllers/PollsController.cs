@@ -33,9 +33,9 @@ namespace PollWebApi.Controllers
         [Route("poll/{id}")]
         public IHttpActionResult GetPoll(int id)
         {
-            var poll = _PollService.GetPollByID(id).ToList();
+            var poll = _PollService.GetPollByID(id);
 
-            if (poll.Count == 0)
+            if (poll == null)
             {
                 return NotFound();
             }
@@ -61,7 +61,7 @@ namespace PollWebApi.Controllers
         }
 
         // POST: poll/5/vote
-        //[ResponseType(typeof(PostVoteResponse))]
+        [ResponseType(typeof(Poll))]
         [Route("poll/{op_id:int}/vote")]
         public IHttpActionResult PostVote(int op_id)
         {
@@ -78,9 +78,9 @@ namespace PollWebApi.Controllers
 
             return Json(new { option_id = op_id });
         }
-        
-        // POST: poll/5/vote
-        //[ResponseType(typeof(PostVoteResponse))]
+
+        // POST: poll/5/stats
+        [ResponseType(typeof(GetStatsResponse))]
         [Route("poll/{poll_id:int}/stats")]
         public IHttpActionResult GetPollStats(int poll_id)
         {
@@ -88,9 +88,9 @@ namespace PollWebApi.Controllers
             {
                 return BadRequest(ModelState);
             }
-            _PollService.GetStatsById(poll_id);
+            var stats = _PollService.GetStatsById(poll_id);
 
-            return Json(new { option_id = 1 });
+            return Json(new { stats });
         }
 
 
