@@ -53,5 +53,7 @@ Cria uma nova enquete e retorna o id.
 POST /poll/:id/vote
 
 ```sh
-Registra um voto para uma opção da enquete e retorna o id dessa opção. Caso a opção não exista no sistema, o retorno será um 404 Not Found.
+Registra um voto para uma opção da enquete e retorna option_id. Caso ela não exista no sistema, o retorno será um 404 Not Found.
 ```
+
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/ec51f18e4cf298f00327)
