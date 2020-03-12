@@ -17,7 +17,7 @@ Ferramentas que utilizei para implementação e teste da API:
 
 ## Restauração do banco de dados
 
-- Com o SSMS já aberto, abrir um servidor local e localize o Pesquisador de Objetos
+- Com o SSMS aberto, abrir um servidor local e localizar o Pesquisador de Objetos
 - Clicar com o direito em Banco De Dados 
 - Clicar em Restaurar Banco de Dados...
 - Selecionar Dispositivo
@@ -29,6 +29,7 @@ Ferramentas que utilizei para implementação e teste da API:
 - Abrir o projeto PollWebApi
 - Compilar solução
 - Executar
+- Para testar, clique no botão no fim dessa página (Run in Postman)
 
 ## Requisições suportadas pela API
 
