@@ -5,9 +5,6 @@ using System.Web;
 using PollWebApi.Entities;
 using PollWebApi.Models.Responses;
 
-/*using System.Text.Json;
-using System.Text.Json.Serialization;*/
-
 namespace PollWebApi.Models.Services
 {
     public class PollService
@@ -18,7 +15,7 @@ namespace PollWebApi.Models.Services
         {
             this.db = db;
         }
-        
+
         public GetPollResponse GetPollByID(int id)
         {
             var poll = from p in db.Poll
@@ -41,34 +38,38 @@ namespace PollWebApi.Models.Services
         public Poll AddPoll(PostPollResponse poll)
         {
             db.Configuration.ProxyCreationEnabled = false;
-            using (var DBContext = db.Database.BeginTransaction())
+
+            var p = new Poll()
             {
-                var p = new Poll()
+                Description = poll.Poll_description
+            };
+
+            List<Options> options = new List<Options>();
+
+            foreach (var op in poll.Options)
+            {
+                options.Add(new Options
                 {
-                    Description = poll.Poll_description
-                };
-
-                db.Poll.Add(p);
-
-
-                List<Options> options = new List<Options>();
-
-                foreach (var op in poll.Options)
-                {
-                    options.Add(new Options
-                    {
-                        Description = op,
-                        Poll_Id = p.Poll_Id
-                    });
-                }
-
-                db.Options.AddRange(options);
-                db.SaveChanges();
-                DBContext.Commit();
-
-                return p;
+                    Description = op,
+                    Poll_Id = p.Poll_Id
+                });
             }
 
+            using (var DBContext = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    db.Poll.Add(p);
+                    db.Options.AddRange(options);
+                    db.SaveChanges();
+                    DBContext.Commit();
+                }
+                catch
+                {
+                    DBContext.Rollback();
+                }
+            }
+            return p;
         }
 
         public bool AddVote(int op)
@@ -76,21 +77,29 @@ namespace PollWebApi.Models.Services
             db.Configuration.ProxyCreationEnabled = false;
             using (var DBContext = db.Database.BeginTransaction())
             {
+
                 var o = db.Options.Find(op);
 
                 if (o == null)
                     return false;
 
-                var v = new Votes()
+                try
                 {
-                    Option_Id = op,
-                    Date = DateTime.Now
-                };
+                    var v = new Votes()
+                    {
+                        Option_Id = op,
+                        Date = DateTime.Now
+                    };
 
-                db.Votes.Add(v);
-                db.SaveChanges();
-                DBContext.Commit();
 
+                    db.Votes.Add(v);
+                    db.SaveChanges();
+                    DBContext.Commit();
+                }
+                catch
+                {
+                    DBContext.Rollback();
+                }
                 return true;
             }
         }
@@ -100,16 +109,23 @@ namespace PollWebApi.Models.Services
             db.Configuration.ProxyCreationEnabled = false;
             using (var DBContext = db.Database.BeginTransaction())
             {
-                var v = new Views()
+                try
                 {
-                    View_Id = (from views in db.Views
-                               select views).Count() + 1,
-                    Poll_Id = poll_id
-                };
+                    var v = new Views()
+                    {
+                        View_Id = (from views in db.Views
+                                   select views).Count() + 1,
+                        Poll_Id = poll_id
+                    };
 
-                db.Views.Add(v);
-                db.SaveChanges();
-                DBContext.Commit();
+                    db.Views.Add(v);
+                    db.SaveChanges();
+                    DBContext.Commit();
+                }
+                catch
+                {
+                    DBContext.Rollback();
+                }
             }
         }
 
@@ -120,16 +136,16 @@ namespace PollWebApi.Models.Services
                              select views).Count();
 
             List<GetVotesStatsResponse> votes = new List<GetVotesStatsResponse>();
-            
-            votes = (from o in db.Options
-                           where (o.Poll_Id == poll_id)
-                           select (new GetVotesStatsResponse
-                           {
-                               Option_Id = o.Option_Id,
-                               Qty = db.Votes.Where(q => q.Option_Id == o.Option_Id).Count()
-                           })).ToList();
 
-            
+            votes = (from o in db.Options
+                     where (o.Poll_Id == poll_id)
+                     select (new GetVotesStatsResponse
+                     {
+                         Option_Id = o.Option_Id,
+                         Qty = db.Votes.Where(q => q.Option_Id == o.Option_Id).Count()
+                     })).ToList();
+
+
             return new GetStatsResponse
             {
                 Views = pollViews,

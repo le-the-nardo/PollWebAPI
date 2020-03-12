@@ -9,11 +9,8 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using PollWebApi.Entities;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
 using PollWebApi.Models.Services;
 using PollWebApi.Models.Responses;
-using System.Web;
 
 namespace PollWebApi.Controllers
 {
